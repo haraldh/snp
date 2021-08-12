@@ -104,3 +104,60 @@ pub struct Start {
     /// Hypervisor provided value to indicate guest OS visible workarounds.The format is hypervisor defined.
     pub gosvw: [u8; 16],
 }
+
+/// Encapsulates the various data needed to begin the update process.
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Deserialize, Serialize)]
+pub struct Update {
+    /// Indicates that this page is part of the IMI of the guest.
+    pub imi_page: u8,
+
+    /// Encoded page type.
+    pub page_type: PageType,
+
+    /// VMPL3 permission mask.
+    pub vmpl3_perms: u8,
+
+    /// VMPL2 permission mask.
+    pub vmpl2_perms: u8,
+
+    /// VMPL1 permission mask.
+    pub vmpl1_perms: u8,
+}
+
+/// Encoded page types for a launch update. See Table 58 of the SNP Firmware
+/// specification for further details.
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Deserialize, Serialize)]
+pub enum PageType {
+    /// A normal data page.
+    Normal,
+
+    /// A VMSA page.
+    Vmsa,
+
+    /// A page full of zeroes.
+    Zero,
+
+    /// A page that is encrypted but not measured
+    Unmeasured,
+
+    /// A page for the firmware to store secrets for the guest.
+    Secrets,
+
+    /// A page for the hypervisor to provide CPUID function values.
+    Cpuid,
+}
+
+impl PageType {
+    /// Get the encoded value for a page type. See Table 58 of the SNP
+    /// Firmware specification for further details.
+    pub fn value(self) -> u8 {
+        match self {
+            PageType::Normal => 0x1,
+            PageType::Vmsa => 0x2,
+            PageType::Zero => 0x3,
+            PageType::Unmeasured => 0x4,
+            PageType::Secrets => 0x5,
+            PageType::Cpuid => 0x6,
+        }
+    }
+}
