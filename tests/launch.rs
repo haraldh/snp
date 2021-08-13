@@ -67,7 +67,7 @@ fn snp() {
     };
 
     launcher
-        .update_data(address_space.as_ref(), &update)
+        .update_data(0, address_space.as_ref(), &update)
         .unwrap();
 
     let hd: [u8; 32] = [0; 32];

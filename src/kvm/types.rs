@@ -52,6 +52,9 @@ impl<'a> LaunchStart<'a> {
 /// Insert pages into the guest physical address space.
 #[repr(C)]
 pub struct LaunchUpdate<'a> {
+    /// Guest page number to start from
+    start_gfn: u64,
+
     /// Bits 63:12 of the sPA of the destination page. The page size
     /// is determined by PAGE_SIZE.
     uaddr: u64,
@@ -79,8 +82,9 @@ pub struct LaunchUpdate<'a> {
 }
 
 impl<'a> LaunchUpdate<'a> {
-    pub fn new(data: &'a [u8], update: &'a Update) -> Self {
+    pub fn new(start_gfn: u64, data: &'a [u8], update: &'a Update) -> Self {
         Self {
+            start_gfn,
             uaddr: data.as_ptr() as _,
             len: data.len() as _,
             imi_page: update.imi_page,
