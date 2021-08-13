@@ -12,10 +12,10 @@ use std::os::unix::io::AsRawFd;
 // source code: include/uapi/linux/kvm.h
 impl_const_id! {
     pub Id => u32;
-    Init = 256,
-    LaunchStart<'_> = 257,
-    LaunchUpdate<'_> = 258,
-    LaunchFinish<'_> = 259,
+    Init = 22,
+    LaunchStart<'_> = 23,
+    LaunchUpdate<'_> = 24,
+    LaunchFinish<'_> = 25,
 }
 
 const KVM: Group = Group::new(0xAE);
